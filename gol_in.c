@@ -1,3 +1,4 @@
+//TASK 1
 #include "gol.h"
 
 char** alocare_matrice(int n, int m)
@@ -22,7 +23,7 @@ char** alocare_matrice(int n, int m)
     return mat;
 }
 
-void eliberare_memorie(char ***mat,int n)
+void eliberare_memorie_matrice(char ***mat,int n)
 {
     int i;
     for(i=0; i<n; i++)
@@ -114,7 +115,7 @@ void reguli_GoL(char **mat, int n, int m)
             mat[i][j]=temp[i][j];
         }
     }
-eliberare_memorie(&temp,n);
+eliberare_memorie_matrice(&temp,n);
 }
 
 void scriere_rezultat(char **mat, int n, const char *nume)
@@ -146,5 +147,147 @@ void scriere_matINITIALA(char **mat, int n, const char *nume)
         fprintf(fisier,"%s\n",mat[i]);
     }
     fprintf(fisier,"\n");
+    fclose(fisier);
+}
+
+//TASK 2
+
+void addAtBeginning_list(LIST** head, COORD v)
+{
+    LIST *newNode=(LIST*)malloc(sizeof(LIST));
+    newNode->poz.l=v.l;
+    newNode->poz.c=v.c;
+    newNode->next=*head;
+    *head=newNode;
+
+}
+
+void addAtEnd_list(LIST **head, COORD v)
+{
+    LIST *aux=*head;
+    LIST *newNode=(LIST*)malloc(sizeof(LIST));
+    newNode->poz.l=v.l;
+    newNode->poz.c=v.c;
+    if(*head == NULL)
+    {
+        addAtBeginning_list(head,v);
+    }
+    else
+    {
+        while (aux->next != NULL)
+        {
+            aux = aux->next;
+        }
+        aux->next = newNode;
+        newNode->next = NULL;
+    }
+}
+
+void eliberare_lista(LIST **head)
+{
+    LIST *aux=*head;
+    LIST *temp;
+    while (aux!=NULL)
+    {
+        temp=aux;
+        aux=aux->next;
+        free(temp);
+    }
+    *head=NULL;
+}
+
+void push(STACK** top, LIST *v, int k) 
+{
+    STACK* newNode = (STACK*)malloc(sizeof(STACK));
+    newNode->elem = v;
+    newNode->gen=k;
+    newNode->next = *top;
+    *top = newNode;
+}
+
+void deleteStack(STACK** top) 
+{
+    STACK* temp;
+    while ((*top) != NULL) 
+    { 
+        temp = *top;
+        *top = (*top)->next;
+        free(temp);
+    }
+}
+
+void aflare_coordonate(char **mat, int n, int m, LIST **head)
+{
+    int vecini;
+    int i,j;
+    COORD v;
+    char **temp=alocare_matrice(n,m);
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            vecini=nr_vecini(mat,n,m,i,j);
+            if(mat[i][j]=='X')
+            {
+                if( vecini < 2 || vecini > 3 )
+                {
+                    temp[i][j]='+';
+                }
+                else
+                {
+                    temp[i][j]='X';
+                }
+            }
+            else
+            {
+                if(vecini==3)
+                {
+                    temp[i][j]='X';
+                }
+                else
+                {
+                    temp[i][j]='+';
+                }
+            }
+        }
+    }
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            if(mat[i][j]!=temp[i][j])
+            {
+                v.l=i;
+                v.c=j;
+                addAtEnd_list(head,v);
+            }
+        }
+    }
+eliberare_memorie_matrice(&temp,n);
+}
+
+void scriere_stack(const char *nume,STACK **top)
+{
+    FILE *fisier=fopen(nume,"w");
+    if(fisier==NULL)
+    {
+        printf("Eroare la deschiderea fisierului pentru scrierea rezulatatului");
+        exit(1);
+    }
+    STACK *p=*top;
+    while(p!=NULL)
+    {
+        LIST *q=p->elem;
+        fprintf(fisier,"%d ", p->gen);
+        while (q!=NULL)
+        {
+            fprintf(fisier,"%d %d ",q->poz.l,q->poz.c);
+            q=q->next;
+        }
+        fprintf(fisier,"\n");
+        p=p->next;
+        eliberare_lista(&q);
+    }
+    deleteStack(&p);
     fclose(fisier);
 }
