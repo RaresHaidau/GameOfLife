@@ -35,5 +35,6 @@ void addAtEnd_list(LIST **head, COORD v);
 void eliberare_lista(LIST **head);
 void aflare_coordonate(char **mat, int n, int m, LIST **head);
 void push(STACK** top, LIST *v, int k);
+int isEmpty(STACK* top);
 void deleteStack(STACK** top);
-void scriere_stack(const char *nume,STACK **top);
+void scriere_stack(const char *nume,STACK *top);
