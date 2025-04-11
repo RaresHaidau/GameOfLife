@@ -152,24 +152,21 @@ void scriere_matINITIALA(char **mat, int n, const char *nume)
 
 // TASK 2
 
-void addAtBeginning_list(LIST **head, COORD v)
-{
-    LIST *newNode = (LIST *)malloc(sizeof(LIST));
-    newNode->poz.l = v.l;
-    newNode->poz.c = v.c;
-    newNode->next = *head;
-    *head = newNode;
-}
-
 void addAtEnd_list(LIST **head, COORD v)
 {
     LIST *aux = *head;
     LIST *newNode = (LIST *)malloc(sizeof(LIST));
+    if (newNode == NULL)
+    {
+        printf("Eroare la alocarea dinamica pentru lista");
+        return;
+    }
     newNode->poz.l = v.l;
     newNode->poz.c = v.c;
+    newNode->next = NULL;
     if (*head == NULL)
     {
-        addAtBeginning_list(head, v);
+        *head = newNode;
     }
     else
     {
@@ -185,10 +182,10 @@ void addAtEnd_list(LIST **head, COORD v)
 void eliberare_lista(LIST **head)
 {
     LIST *aux = *head;
-    LIST *temp;
+    // LIST *temp;
     while (aux != NULL)
     {
-        temp = aux;
+        LIST *temp = aux;
         aux = aux->next;
         free(temp);
     }
@@ -204,17 +201,12 @@ void push(STACK **top, LIST *v, int k)
     *top = newNode;
 }
 
-int isEmpty(STACK* top) 
-{
-    return top == NULL;
-}
-
 void deleteStack(STACK **top)
 {
-    STACK *temp;
+
     while ((*top) != NULL)
     {
-        temp = *top;
+        STACK *temp = *top;
         *top = (*top)->next;
         free(temp);
     }
@@ -271,35 +263,66 @@ void aflare_coordonate(char **mat, int n, int m, LIST **head)
     eliberare_memorie_matrice(&temp, n);
 }
 
+// void inversare_stack(STACK **top)
+// {
+//     STACK *p,*aux;
+//     if(top==NULL)
+//     {
+//         return;
+//     }
+//     p=(*top)->next;
+//     (*top)->next=NULL;
+//     while(p)
+//     {
+//         aux=p;
+//         p=p->next;
+//         aux->next=(*top);
+//         (*top)=aux;
+//     }
+// }
 
-
-void scriere_stack(const char *nume, STACK *top)
+void scriere_stack_initial(const char *nume, STACK *top)
 {
-    if(top==NULL)
-    {
-        exit(1);
-    }
-    scriere_stack(nume,top->next);
+
     FILE *fisier = fopen(nume, "w");
     if (fisier == NULL)
     {
         printf("Eroare la deschiderea fisierului pentru scrierea rezulatatului");
         exit(1);
     }
-    STACK *p = top;
-    while (p != NULL)
+    if (top != NULL)
     {
-        LIST *q = p->elem;
-        fprintf(fisier, "%d ", p->gen);
+        fprintf(fisier, "%d", top->gen);
+        LIST *q = top->elem;
         while (q != NULL)
         {
-            fprintf(fisier, "%d %d ", q->poz.l, q->poz.c);
+            fprintf(fisier, " %d %d", q->poz.l, q->poz.c);
             q = q->next;
         }
         fprintf(fisier, "\n");
-        p = p->next;
-        eliberare_lista(&q);
     }
-    deleteStack(&p);
+    fclose(fisier);
+}
+
+void scriere_stack(const char *nume, STACK *top)
+{
+
+    FILE *fisier = fopen(nume, "a");
+    if (fisier == NULL)
+    {
+        printf("Eroare la deschiderea fisierului pentru scrierea rezulatatului");
+        exit(1);
+    }
+    if (top != NULL)
+    {
+        fprintf(fisier, "%d", top->gen);
+        LIST *q = top->elem;
+        while (q != NULL)
+        {
+            fprintf(fisier, " %d %d", q->poz.l, q->poz.c);
+            q = q->next;
+        }
+        fprintf(fisier, "\n");
+    }
     fclose(fisier);
 }
