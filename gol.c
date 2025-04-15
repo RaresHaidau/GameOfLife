@@ -6,6 +6,7 @@ int main(int argc, char **argv)
     char **mat;
     LIST *head = NULL;
     STACK *top = NULL;
+    bnrTree *root=NULL;
     // TASK 1
     mat = citire_fisier(argv[1], &N, &M, &T, &K);
     if (T == 1)
@@ -17,10 +18,11 @@ int main(int argc, char **argv)
             scriere_rezultat(mat, N, argv[2]);
         }
         eliberare_memorie_matrice(&mat, N);
-        // finTASK 1
-        // TASK 2
-        mat = citire_fisier(argv[1], &N, &M, &T, &K);
     }
+    // finTASK 1
+    // TASK 2
+    mat = citire_fisier(argv[1], &N, &M, &T, &K);
+    
     if (T == 2)
     {
         for (int i = 0; i < K; i++)
@@ -42,5 +44,12 @@ int main(int argc, char **argv)
     }
     eliberare_memorie_matrice(&mat, N);
     // finTASK 2
+    // TASK 3
+    mat = citire_fisier(argv[1], &N, &M, &T, &K);
+    if(T==3)
+    {
+        populare_root(&root,mat,N,M);
+    }   
+    eliberare_memorie_matrice(&mat, N);
     return 0;
 }

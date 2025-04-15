@@ -272,13 +272,14 @@ void aflare_coordonate(char **mat, int n, int m, LIST **head)
 //     }
 //     p=(*top)->next;
 //     (*top)->next=NULL;
-//     while(p)
+//     while((*top))
 //     {
 //         aux=p;
 //         p=p->next;
-//         aux->next=(*top);
-//         (*top)=aux;
+//         aux->next=p;
+//
 //     }
+//      (*top)=aux;
 // }
 
 void scriere_stack_initial(const char *nume, STACK *top)
@@ -325,4 +326,109 @@ void scriere_stack(const char *nume, STACK *top)
         fprintf(fisier, "\n");
     }
     fclose(fisier);
+}
+
+// TASK3
+
+void reguli_GoL_left(char **mat, int n, int m, bnrTree **root)
+{
+    int vecini;
+    int i, j;
+    char **temp = alocare_matrice(n, m);
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            vecini = nr_vecini(mat, n, m, i, j);
+            if (vecini == 2 && mat[i][j] == '+')
+            {
+                temp[i][j] = 'X';
+            }
+        }
+    }
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < m; j++)
+        {
+            if (mat[i][j] != temp[i][j])
+            {
+                (*root)->elem->poz.l = i;
+                (*root)->elem->poz.c = j;
+            }
+            mat[i][j] = temp[i][j];
+        }
+    }
+}
+
+void reguli_GoL_right(char **mat, int n, int m, bnrTree **root)
+{
+    int vecini;
+    int i, j;
+    char **temp = alocare_matrice(n, m);
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < m; j++)
+        {
+            vecini = nr_vecini(mat, n, m, i, j);
+            if (mat[i][j] == 'X')
+            {
+                if (vecini < 2 || vecini > 3)
+                {
+                    temp[i][j] = '+';
+                }
+                else
+                {
+                    temp[i][j] = 'X';
+                }
+            }
+            else
+            {
+                if (vecini == 3)
+                {
+                    temp[i][j] = 'X';
+                }
+                else
+                {
+                    temp[i][j] = '+';
+                }
+            }
+        }
+    }
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < m; j++)
+        {
+            if (mat[i][j] != temp[i][j])
+            {
+                (*root)->elem->poz.l = i;
+                (*root)->elem->poz.c = j;
+            }
+            mat[i][j] = temp[i][j];
+        }
+    }
+    eliberare_memorie_matrice(&temp, n);
+}
+
+
+
+void populare_root(bnrTree **root,char **mat,int n,int m)
+{
+    bnrTree *newNode=(bnrTree*)malloc(sizeof(bnrTree));
+    newNode->elem=NULL;
+    newNode->left=NULL;
+    newNode->right=NULL;
+
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            if(mat[i][j]=='X')
+            {
+                COORD cord;
+                cord.l=i;
+                cord.c=j;
+                addAtEnd_list(&((*root)->elem),cord);
+            }
+        }
+    }
 }

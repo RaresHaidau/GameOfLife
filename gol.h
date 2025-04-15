@@ -23,6 +23,14 @@ struct stack
 };
 typedef struct stack STACK;
 
+struct tree
+{
+    LIST *elem;
+    struct tree *left;
+    struct tree *right;
+};
+typedef struct tree bnrTree;
+
 char **alocare_matrice(int n, int m);
 void eliberare_memorie_matrice(char ***mat, int n);
 char **citire_fisier(const char *nume, int *n, int *m, int *t, int *k);
@@ -35,6 +43,8 @@ void eliberare_lista(LIST **head);
 void aflare_coordonate(char **mat, int n, int m, LIST **head);
 void push(STACK **top, LIST *v, int k);
 void deleteStack(STACK **top);
-// void inversare_stack(STACK **top);
+void inversare_stack(STACK **top);
+void scriere_stack_terminal( STACK *top);
 void scriere_stack_initial(const char *nume, STACK *top);
 void scriere_stack(const char *nume, STACK *top);
+void populare_root(bnrTree **root,char **mat,int n,int m);
