@@ -352,8 +352,10 @@ void reguli_GoL_left(char **mat, int n, int m, bnrTree **root)
         {
             if (mat[i][j] != temp[i][j])
             {
-                (*root)->elem->poz.l = i;
-                (*root)->elem->poz.c = j;
+                COORD cord;
+                cord.l = i;
+                cord.c = j;
+                addAtEnd_list(&((*root)->elem), cord);
             }
             mat[i][j] = temp[i][j];
         }
@@ -400,8 +402,10 @@ void reguli_GoL_right(char **mat, int n, int m, bnrTree **root)
         {
             if (mat[i][j] != temp[i][j])
             {
-                (*root)->elem->poz.l = i;
-                (*root)->elem->poz.c = j;
+                COORD cord;
+                cord.l = i;
+                cord.c = j;
+                addAtEnd_list(&((*root)->elem), cord);
             }
             mat[i][j] = temp[i][j];
         }
@@ -409,26 +413,98 @@ void reguli_GoL_right(char **mat, int n, int m, bnrTree **root)
     eliberare_memorie_matrice(&temp, n);
 }
 
-
-
-void populare_root(bnrTree **root,char **mat,int n,int m)
+void populare_root(bnrTree **root, char **mat, int n, int m)
 {
-    bnrTree *newNode=(bnrTree*)malloc(sizeof(bnrTree));
-    newNode->elem=NULL;
-    newNode->left=NULL;
-    newNode->right=NULL;
+    bnrTree *newNode = (bnrTree *)malloc(sizeof(bnrTree));
+    newNode->elem = NULL;
+    newNode->left = NULL;
+    newNode->right = NULL;
 
-    for(int i=0;i<n;i++)
+    for (int i = 0; i < n; i++)
     {
-        for(int j=0;j<m;j++)
+        for (int j = 0; j < m; j++)
         {
-            if(mat[i][j]=='X')
+            if (mat[i][j] == 'X')
             {
                 COORD cord;
-                cord.l=i;
-                cord.c=j;
-                addAtEnd_list(&((*root)->elem),cord);
+                cord.l = i;
+                cord.c = j;
+                addAtEnd_list(&((*root)->elem), cord);
             }
         }
     }
+}
+
+void reguli_noi_GoL(bnrTree **root, char **mat, int n, int m, int k)
+{
+    if (k == 0)
+    {
+        return;
+    }
+    char **mat_left = alocare_matrice(n, m);
+    char **mat_right = alocare_matrice(n, m);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            mat_left[i][j] = mat[i][j];
+            mat_right[i][j] = mat[i][j];
+        }
+    }
+    (*root)->left = (bnrTree *)malloc(sizeof(bnrTree));
+    (*root)->right = (bnrTree *)malloc(sizeof(bnrTree));
+
+    (*root)->left->elem = NULL;
+    (*root)->left->left = NULL;
+    (*root)->left->right = NULL;
+
+    (*root)->right->elem = NULL;
+    (*root)->right->left = NULL;
+    (*root)->right->right = NULL;
+
+    reguli_GoL_left(mat_left, n, m, &(*root)->left);
+    reguli_GoL_right(mat_right, n, m, &(*root)->right);
+
+    reguli_noi_GoL(&(*root)->left, mat_left, n, m, k - 1);
+    reguli_noi_GoL(&(*root)->right, mat_right, n, m, k - 1);
+
+    eliberare_memorie_matrice(&mat_left, n);
+    eliberare_memorie_matrice(&mat_right, n);
+}
+
+void afisare_bnr(bnrTree *root, const char *nume, char ***mat, int n, int m)
+{
+    FILE *fisier = fopen(nume, "a");
+    if (fisier == NULL)
+    {
+        printf("Eroare la deschiderea fisierului pentru scrierea rezultatului");
+        exit(1);
+    }
+    if(root)
+    {
+        LIST *v = root->elem;
+
+    }
+}
+
+void afisare_root(bnrTree *root, const char *nume, char **mat, int n, int m)
+{
+    FILE *fisier = fopen(nume, "w");
+    if (fisier == NULL)
+    {
+        printf("Eroare la deschiderea fisierului pentru scrierea rezulatatului");
+        exit(1);
+    }
+    for (int i = 0; i < n; i++)
+    {
+        fprintf(fisier, "%s\n", mat[i]);
+    }
+    fprintf(fisier, "\n");
+    if (root)
+    {
+
+        //preorder(root->left);
+        //preorder(root->right);
+    }
+    fclose(fisier);
 }

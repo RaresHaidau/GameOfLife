@@ -49,6 +49,8 @@ int main(int argc, char **argv)
     if(T==3)
     {
         populare_root(&root,mat,N,M);
+        
+
     }   
     eliberare_memorie_matrice(&mat, N);
     return 0;
