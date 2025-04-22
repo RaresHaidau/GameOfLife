@@ -49,8 +49,9 @@ int main(int argc, char **argv)
     if(T==3)
     {
         populare_root(&root,mat,N,M);
-        
-
+        reguli_noi_GoL(&root,mat,N,M,K);
+        afisare_root(root,argv[2],mat,N,M);
+        //eliberare memorie
     }   
     eliberare_memorie_matrice(&mat, N);
     return 0;
