@@ -344,6 +344,10 @@ void reguli_GoL_left(char **mat, int n, int m, bnrTree **root)
             {
                 temp[i][j] = 'X';
             }
+            else
+            {
+                temp[i][j] = mat[i][j];
+            }
         }
     }
     for (i = 0; i < n; i++)
@@ -357,9 +361,10 @@ void reguli_GoL_left(char **mat, int n, int m, bnrTree **root)
                 cord.c = j;
                 addAtEnd_list(&((*root)->elem), cord);
             }
-            mat[i][j] = temp[i][j];
+            // mat[i][j] = temp[i][j];
         }
     }
+    eliberare_memorie_matrice(&temp, n);
 }
 
 void reguli_GoL_right(char **mat, int n, int m, bnrTree **root)
@@ -407,7 +412,7 @@ void reguli_GoL_right(char **mat, int n, int m, bnrTree **root)
                 cord.c = j;
                 addAtEnd_list(&((*root)->elem), cord);
             }
-            mat[i][j] = temp[i][j];
+            // mat[i][j] = temp[i][j];
         }
     }
     eliberare_memorie_matrice(&temp, n);
@@ -435,7 +440,21 @@ void populare_root(bnrTree **root, char **mat, int n, int m)
     }
 }
 
-void eliberare_root(**root);
+void modificare_matrice(char **mat, LIST *v)
+{
+    while (v != NULL)
+    {
+        if (mat[v->poz.l][v->poz.c] == 'X')
+        {
+            mat[v->poz.l][v->poz.c] = '+';
+        }
+        else
+        {
+            mat[v->poz.l][v->poz.c] = 'X';
+        }
+        v = v->next;
+    }
+}
 
 void reguli_noi_GoL(bnrTree **root, char **mat, int n, int m, int k)
 {
@@ -465,7 +484,10 @@ void reguli_noi_GoL(bnrTree **root, char **mat, int n, int m, int k)
     (*root)->right->right = NULL;
 
     reguli_GoL_left(mat_left, n, m, &(*root)->left);
+    modificare_matrice(mat_left, (*root)->left->elem);
+
     reguli_GoL_right(mat_right, n, m, &(*root)->right);
+    modificare_matrice(mat_right, (*root)->right->elem);
 
     reguli_noi_GoL(&(*root)->left, mat_left, n, m, k - 1);
     reguli_noi_GoL(&(*root)->right, mat_right, n, m, k - 1);
@@ -474,41 +496,49 @@ void reguli_noi_GoL(bnrTree **root, char **mat, int n, int m, int k)
     eliberare_memorie_matrice(&mat_right, n);
 }
 
-void afisare_bnr(bnrTree *root, const char *nume, char **mat, int n, int m)
+void afisare_bnr(bnrTree *root, FILE *fisier, char **mat, int n, int m)
 {
     if (root == NULL)
     {
         return;
     }
-    FILE *fisier = fopen(nume, "a");
-    if (fisier == NULL)
+    // FILE *fisier = fopen(nume, "a");
+    // if (fisier == NULL)
+    // {
+    //     printf("Eroare la deschiderea fisierului pentru scrierea rezultatului");
+    //     exit(1);
+    // }
+    char **temp = alocare_matrice(n, m);
+    for (int i = 0; i < n; i++)
     {
-        printf("Eroare la deschiderea fisierului pentru scrierea rezultatului");
-        exit(1);
+        for (int j = 0; j < m; j++)
+        {
+            temp[i][j] = mat[i][j];
+        }
     }
     LIST *v = root->elem;
     while (v != NULL)
     {
-        
-        if (mat[v->poz.l][v->poz.c] == 'X')
+
+        if (temp[v->poz.l][v->poz.c] == 'X')
         {
-            mat[v->poz.l][v->poz.c] = '+';
+            temp[v->poz.l][v->poz.c] = '+';
         }
-        else
-        if(mat[v->poz.l][v->poz.c] = '+')
+        else if (temp[v->poz.l][v->poz.c] == '+')
         {
-            mat[v->poz.l][v->poz.c] = 'X';
+            temp[v->poz.l][v->poz.c] = 'X';
         }
-        v=v->next;
+        v = v->next;
     }
     for (int i = 0; i < n; i++)
     {
-        fprintf(fisier, "%s\n", mat[i]);
+        fprintf(fisier, "%s\n", temp[i]);
     }
     fprintf(fisier, "\n");
-    afisare_bnr(root->left,nume,mat,n,m);
-    afisare_bnr(root->right,nume,mat,n,m);
-    fclose(fisier);
+    afisare_bnr(root->left, fisier, temp, n, m);
+    afisare_bnr(root->right, fisier, temp, n, m);
+    eliberare_memorie_matrice(&temp, n);
+    // fclose(fisier);
 }
 
 void afisare_root(bnrTree *root, const char *nume, char **mat, int n, int m)
@@ -524,10 +554,10 @@ void afisare_root(bnrTree *root, const char *nume, char **mat, int n, int m)
         fprintf(fisier, "%s\n", mat[i]);
     }
     fprintf(fisier, "\n");
-    if (root!=NULL)
+    if (root != NULL)
     {
-        afisare_bnr(root->left,nume,mat,n,m);
-        afisare_bnr(root->right,nume,mat,n,m);
+        afisare_bnr(root->left, fisier, mat, n, m);
+        afisare_bnr(root->right, fisier, mat, n, m);
     }
     fclose(fisier);
 }
