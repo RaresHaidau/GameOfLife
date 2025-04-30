@@ -51,6 +51,7 @@ void reguli_GoL_left(char **mat, int n, int m, bnrTree **root);
 void reguli_GoL_right(char **mat, int n, int m, bnrTree **root);
 void reguli_GoL_right(char **mat, int n, int m, bnrTree **root);
 void populare_root(bnrTree **root,char **mat,int n,int m);
+void eliberare_bnrtree(bnrTree **root);
 void modificare_matrice(char **mat, LIST *v);
 void reguli_noi_GoL(bnrTree **root, char **mat, int n, int m, int k);
 void afisare_bnr(bnrTree *root, FILE *fisier, char **mat, int n, int m);

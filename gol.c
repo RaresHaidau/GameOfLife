@@ -17,12 +17,11 @@ int main(int argc, char **argv)
             reguli_GoL(mat, N, M);
             scriere_rezultat(mat, N, argv[2]);
         }
-        eliberare_memorie_matrice(&mat, N);
     }
+    eliberare_memorie_matrice(&mat, N);
     // finTASK 1
     // TASK 2
     mat = citire_fisier(argv[1], &N, &M, &T, &K);
-    
     if (T == 2)
     {
         for (int i = 0; i < K; i++)
@@ -51,8 +50,9 @@ int main(int argc, char **argv)
         populare_root(&root,mat,N,M);
         reguli_noi_GoL(&root,mat,N,M,K);
         afisare_root(root,argv[2],mat,N,M);
-        //eliberare memorie
+        eliberare_bnrtree(&root);
     }   
     eliberare_memorie_matrice(&mat, N);
+    //finTASK 3
     return 0;
 }

@@ -440,6 +440,19 @@ void populare_root(bnrTree **root, char **mat, int n, int m)
     }
 }
 
+void eliberare_bnrtree(bnrTree **root)
+{
+    if(*root==NULL)
+    {
+        return;
+    }
+    eliberare_bnrtree(&(*root)->left);
+    eliberare_bnrtree(&(*root)->right);
+    eliberare_lista(&(*root)->elem);
+    free(*root);
+    *root=NULL;
+}
+
 void modificare_matrice(char **mat, LIST *v)
 {
     while (v != NULL)
