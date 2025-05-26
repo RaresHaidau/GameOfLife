@@ -8,7 +8,7 @@ Task3: -implements a new set of rules for the game;
        -each node contains only the coordonates of the cells that changed their state from the past generation;
 Task4: -for each node from Task3 it finds the longest Hamiltonian path;
        -the code puts the longest path in the output file
-!!Task4 doesn't work!!
+       !NOTE!:**Task4 doesn't work**
 
 #HOW TO USE
 The code must be given an input and output file when run, both have to be .txt files.
