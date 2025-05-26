@@ -867,7 +867,7 @@ void hamiloton_recursiv(bnrTree *node,char **mat_init,int n,int m,const char *nu
         }
     }
     modificare_matrice(mat_actuala,node->elem);
-    aplicare_hamilton_nod(node,mat_actuala,n,m,nume);
+    aplicare_hamilton_node(node,mat_actuala,n,m,nume);
     hamiloton_recursiv(node->left,mat_actuala,n,m,nume);
     hamiloton_recursiv(node->right,mat_actuala,n,m,nume);
     eliberare_memorie_matrice(&mat_actuala,n);
