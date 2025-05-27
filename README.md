@@ -1,4 +1,4 @@
-#FEATURES
+# FEATURES
 Task1: -implements the basic rules of John Conway's Game of Life;
 Task2: -uses a Stack of Lists to contain the coordonates of the cells that changed their state from the past generation;
        -each element of the Stack represent a generation;
@@ -10,7 +10,7 @@ Task4: -for each node from Task3 it finds the longest Hamiltonian path;
        -the code puts the longest path in the output file
        !NOTE!:**Task4 doesn't work**
 
-#HOW TO USE
+# HOW TO USE
 The code must be given an input and output file when run, both have to be .txt files.
 Input file: MUST follow this exact input
 T //number of the task;
@@ -18,7 +18,7 @@ N M //dimensions of the matrix;
 K //number of generations;
 The matrix containing the initial state of the cells;
 
-#FUNCTIONS
+# FUNCTIONS
 reguli_GoL - apply the basic rules of Game of Life;
 aflare_coordonate - puts the modified cells in the stack;
 reguli_GoL_left/reguli_GoL_right - containd the rules for each direction;
@@ -28,11 +28,11 @@ DFS - calculates the longest path;
 aplicare_hamilton - does the vector for longest hamiltonian path;
 aplicare_hamilton_node - applyes hamilton for only one node;
 
-#NEEDS FIXING
+# NEEDS FIXING
 Task4: Determine, for each node of the tree obtained in Task 3 up to a given generation K, the longest Hamiltonian path.
 ##Problem
 Only prints -1 if hamilton and aplicare_hamilton are used;
 Prints nothing if hamilton_recursiv and aplicare_hamilton_node are used;
 
-#BONUS
-Reversez the actions from Task2;
+# BONUS
+Reverse the actions from Task2;
